@@ -8,18 +8,20 @@ from tkinter import RIGHT
 from tkinter import Entry
 from tkinter import StringVar
 import socket
+import time
 
 # now that I tested the code I have to create a client
 
 msg = "Connect with the target"
 
-def sockBtnCallBack(textField,portField,msgToShow):
+def sockBtnCallBack(textField,portField,msgToShow,root):
 
     print("You've entered : ",textField.get(),portField.get())
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 #    sock.bind((textField.get(),int(portField.get())))
     sock.connect((textField.get(),int(portField.get())))
     msgToShow.set("Connected with the target")
+    root.withdraw()
     
 #    sock.listen()
     
@@ -30,6 +32,8 @@ def sockBtnCallBack(textField,portField,msgToShow):
     data = sock.recv(1024)
     print("Server recieved from client: ",data)
     sock.close()
+    time.sleep(10)
+    root.deiconify()
 
 def main():
     root = Tk() # Creating the root
@@ -57,7 +61,7 @@ def main():
     connStatus = Label(root,textvariable=msgToShow)
     connStatus.place(x = 50,y = 220)
     
-    btn = Button (root,text="Connect",justify="center",command = lambda:sockBtnCallBack(textField,portField,msgToShow))
+    btn = Button (root,text="Connect",justify="center",command = lambda:sockBtnCallBack(textField,portField,msgToShow,root))
     btn.place(x= 100,y=170)
 
 
